@@ -10,6 +10,7 @@ set_xmakever("2.8.2")
 
 -- includes
 includes("lib/commonlibsse-ng")
+includes("lib/serdehkx")
 
 -- set project
 set_project(name)
@@ -37,6 +38,7 @@ includes("xmake-rules.lua")
 target(name)
     -- add dependencies to target
     add_deps("commonlibsse-ng")
+    add_deps("serdehkx")
 
     -- add commonlibsse-ng plugin
     add_rules("commonlibsse-ng.plugin", {
@@ -51,13 +53,6 @@ target(name)
             {src = "ini/Settings.ini", dest = string.format("SKSE/Plugins/%s/Settings.ini", name)}
         }
     })
-
-    -- add serde_hkx static library
-    add_includedirs("lib/serdehkx")
-    add_linkdirs("lib/serdehkx")
-    add_links("serde_hkx_ffi")
-    -- Rust std library dependencies
-    add_syslinks("ntdll", "ws2_32", "userenv", "bcrypt", "advapi32")
 
     -- add src files
     add_files("src/**.cpp")

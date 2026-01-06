@@ -2,3 +2,6 @@
 	path = lib/commonlibsse-ng
 	url = https://github.com/alandtse/CommonLibVR.git
 	branch = ng
+[submodule "lib/serdehkx/serde-hkx"]
+	path = lib/serdehkx/serde-hkx
+	url = https://github.com/SARDONYX-sard/serde-hkx.git
