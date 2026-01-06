@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types: [opened, reopened, synchronize]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          submodules: "recursive"
+
+      - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: "3.0.6"
+          package-cache: true
+          package-cache-key: "APoseFix"
+
+      # To build serde-hkx ffi
+      - name: Rust setup
+        uses: dtolnay/rust-toolchain@stable
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2.8.2
+        with:
+          prefix-key: cargo-release-windows_latest
+          workspaces: "${{ github.workspace }}/lib/serdehkx/serde-hkx" # Rust src root dir
+
+      - name: Build & Install
+        run: xmake build -y && xmake install -o ./build/artifact APoseFix
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: Skyrim-APoseFix
+          path: |
+            ./build/artifact/
